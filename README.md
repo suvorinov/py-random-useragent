@@ -1,4 +1,4 @@
-# py-random-user-agent
+# py-random-useragent
 
 Generate a random User Agent
 
