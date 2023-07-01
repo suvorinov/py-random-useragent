@@ -14,6 +14,6 @@ pip install py-random-useragent
 from py_random_useragent import UserAgent
 
 # Получение UserAgent
-ua = UserAgent().get_ua()
-print(ua)
+UA = UserAgent()
+print(UA.get_ua())
 ```
