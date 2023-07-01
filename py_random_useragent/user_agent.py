@@ -2,7 +2,7 @@
 # @Author: Suvorinov Oleg <olegsuvorinov@me.com>
 # @Date:   2023-02-28 10:01:30
 # @Last Modified by:   Oleg Suvorinov
-# @Last Modified time: 2023-06-30 09:33:56
+# @Last Modified time: 2023-07-01 09:15:38
 
 import os
 import random
@@ -18,6 +18,7 @@ class UserAgent(object):
         super(UserAgent, self).__init__()
 
         self._u_agents = []
+        self.__most_common_user_agents()
 
     def __most_common_user_agents(self):
         """Забираем содержмое страницы с наиболее популярными
@@ -32,26 +33,22 @@ class UserAgent(object):
             r = requests.get(url)
             xml = html.fromstring(r.content)
             elem = xml.xpath(xpath)[0]
-        except Exception:
-            pass
-        else:
+
             cur_dir, _ = os.path.split(__file__)
             ua_file = os.path.join(cur_dir, 'useragents.txt')
             with open(ua_file, 'w') as f:
                 f.write(elem.text_content())
-
-    def update_ua(self):
-        """Обновляем список наиболее популярных
-        браузеров"""
-
-        self.__most_common_user_agents()
+            for line in elem.text_content().split('\n'):
+                self._u_agents.append(line.strip())
+        except Exception:
+            pass
 
     def get_ua(self) -> str:
         """Рандомно забираем User Agents из файла
         useragents.txt
         """
 
-        _u_a = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0' # noqa
+        u_a = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0' # noqa
         if self._u_agents:
             return random.choice(self._u_agents)
 
@@ -62,6 +59,6 @@ class UserAgent(object):
                 for line in f:
                     self._u_agents.append(line.strip())
         except Exception:
-            return _u_a
+            return u_a
         else:
             return random.choice(self._u_agents)
